@@ -19,7 +19,7 @@ export default function DisplayLand({ sLand, loadingL }) {
                     <div className="col-md-3" key={estate._id}>
                         <div className={`${style.card}`}>
                             <Link to={`/ara/ditalStateArabic/${estate._id}`} className='text-decoration-none'>
-                                <img src={estate.imageUrl} alt='عقار' />
+                                <img src={estate.imageUrl[0]} alt='عقار' />
                                 <p className={`${style.price}`}>{estate.price} دولار</p>
                                 <p className={`${style.type}`}>{estate.typeEstates}</p>
                                 <p className={`${style.address}`}>{estate.address}</p>
