@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect,useContext,useState } from 'react'
 import style from '../home/Home.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,8 @@ import DisplayHouse from '../house/DisplayHouse';
 import DisplayLand from '../land/DisplayLand';
 import ContactUs from '../contact/ContactUs';
 import DisplayFeedback from '../displayFeedback/DisplayFeedback';
+import { UserContext } from '../context/User';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
     // const [activeButton, setActiveButton] = useState("");
@@ -17,6 +19,24 @@ export default function Home() {
     // const isActive = (btn) => {
     //     setActiveButton(btn);
     // }
+    let {userData,userToken,isAdmin}=useContext(UserContext);
+    const navigat=useNavigate();
+    useEffect(() => {
+        if (isAdmin) {
+          try {
+            console.log('user is admin :',isAdmin);
+            navigat('/admin');
+    
+          } catch (error) {
+            console.error('Error decoding the token:', error);
+          }
+        }
+      }, [isAdmin]);
+      if (isAdmin) {
+        navigat('/admin');
+      }
+    
+    console.log("user data",userData ,"user token",userToken);
 
     const RecentlyEstate = async () => {
         try {
@@ -61,6 +81,8 @@ export default function Home() {
     const { data: estateData1, isLoading: isEstateLoading1} = useQuery("displayHouseEstate", displayHouse);
     const { data: estateDataLand, isLoading: isLoadingLand} = useQuery("displayLandEstate", displayLand);
     const { data: feedback, isLoading: isLoadingFeedback } = useQuery("displayFeedback", displayFeedback);
+
+    
 
 
     return (

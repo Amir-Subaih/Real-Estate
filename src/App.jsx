@@ -19,6 +19,11 @@ import SeeAllLand from './components/web/land/SellAllLand';
 import ContactUs from './components/web/contact/ContactUs';
 import AddFeedback from './components/web/addFeedback/AddFeedback';
 
+// Admin
+import Admin from './components/web/admin/Admin';
+import WebLayoutAdmin from './layout/WebLayoutAdmin';
+import AllEstate from './components/web/admin/AllEstate';
+
 // Importing Arabic components
 import WebLayoutArabic from './layout/WebLayoutArabic';
 import LoginArabic from './components/web/login/LoginArabic';
@@ -35,6 +40,7 @@ import SeeAllHouseArabic from './components/web/house/SeeAllHouseArabic';
 import SeeAllLandArabic from './components/web/land/SellAllLandArabic';
 import ContactUsArabic from './components/web/contact/ContactUsArabic';
 import AddFeedbackArabic from './components/web/addFeedback/AddFeedbackArabic';
+
 
 
 export default function App() {
@@ -203,6 +209,30 @@ export default function App() {
       }
     ]
     },
+    {
+      path: '/admin',
+      element: <WebLayoutAdmin/>,
+      children:[
+      {
+        path: '/admin',
+        element: <Admin />,
+        children:[
+            {
+              index:true,
+              element:<UserInfo/>
+            },
+            {
+              path:"updateInfo",
+              element:<UpdateInfo/>
+            },
+             {
+               path:"allEstate",
+               element:<AllEstate/>,
+             }
+          ]
+      }
+    ]
+    }
   ]);
   return (
     // <UserContextProvider>

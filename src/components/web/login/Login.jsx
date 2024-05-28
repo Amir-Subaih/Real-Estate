@@ -10,7 +10,7 @@ import { UserContext } from '../context/User'
 
 export default function Login() {
     const navigat=useNavigate();
-    const {setUserToken,setUserId,userData}=useContext(UserContext);
+    const {setUserToken,setUserId,userData,setUserData}=useContext(UserContext);
     console.log(userData);
     const [ifError,setIfError]=useState(false);
     const initialValues=
@@ -30,6 +30,7 @@ export default function Login() {
             setUserToken(data.token);
             localStorage.setItem("userId",data.other._id);
             setUserId(data.other._id);
+            setUserData(data.other);
             toast.success(`Hello ${data.other.name}`);
             navigat('/');
         }
