@@ -23,6 +23,7 @@ import AddFeedback from './components/web/addFeedback/AddFeedback';
 import Admin from './components/web/admin/Admin';
 import WebLayoutAdmin from './layout/WebLayoutAdmin';
 import AllEstate from './components/web/admin/AllEstate';
+import UserList from './components/web/admin/UserList';
 
 // Importing Arabic components
 import WebLayoutArabic from './layout/WebLayoutArabic';
@@ -225,10 +226,15 @@ export default function App() {
               path:"updateInfo",
               element:<UpdateInfo/>
             },
-             {
+            {
                path:"allEstate",
                element:<AllEstate/>,
-             }
+            },
+            {
+              path:"allUser",
+              element:<UserList/>
+            }
+
           ]
       }
     ]

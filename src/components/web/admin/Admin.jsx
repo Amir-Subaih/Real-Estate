@@ -22,6 +22,7 @@ const AdminPage = () => {
                     <Link to="/">Info</Link>
                     <Link to="updateInfo"> Update Data</Link>
                     <Link to="allEstate"> All Estate</Link> 
+                    <Link to="allUser"> All User</Link>
                 <Link onClick={logout}>Logout</Link>
             </nav>
 
