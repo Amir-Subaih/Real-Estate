@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import style from './DisplayFeedback.module.css';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import {DisplayContext} from '../context/Display';
 
-export default function Feedback({ df, loadingF }) {
-    console.log(df);
+export default function Feedback() {
 
-    if (loadingF) {
+    const displayContext = useContext(DisplayContext);
+
+    if (!displayContext) {
+        return <div className={style.error}>Context not available</div>; // Added error handling
+    }
+    
+    let {displayFeedback}=displayContext;
+
+    const getFeedback=async()=>{
+        const result = await displayFeedback();
+        return result;
+    }
+    const {data,isLoading}=useQuery("getFeedback",getFeedback);
+
+    console.log("this feedback",data);
+    
+
+    if (isLoading) {
         return <h1>Loading...</h1>;
     }
 
@@ -15,9 +33,9 @@ export default function Feedback({ df, loadingF }) {
                 <p className={`${style.p1}`}>Feedback</p>
                 <Link to={"/addFeedback"} className={`${style.btnAddFeedback}`}>Add Feedback</Link>
             </div>
-            <div cclassName={`${style.cardContainer}`}>
+            <div className={`${style.cardContainer}`}>
                 <div className="row">
-                    {df && df.feedbacks ? df.feedbacks.map((state) =>
+                    {data && data.feedbacks ? data.feedbacks.map((state) =>
                         <div className="col-md-3 " key={state._id}>
                             <div className={`${style.card}`}>
                                 <div className={`${style.cardHeader}`}>

@@ -18,6 +18,8 @@ import SeeAllHouse from './components/web/house/SeeAllHouse';
 import SeeAllLand from './components/web/land/SellAllLand';
 import ContactUs from './components/web/contact/ContactUs';
 import AddFeedback from './components/web/addFeedback/AddFeedback';
+import ResultSearch from './components/web/searchResult/ResultSearch';
+import SearchOnCity from './components/web/searchResult/SearchOnCity';
 
 // Admin
 import Admin from './components/web/admin/Admin';
@@ -41,6 +43,8 @@ import SeeAllHouseArabic from './components/web/house/SeeAllHouseArabic';
 import SeeAllLandArabic from './components/web/land/SellAllLandArabic';
 import ContactUsArabic from './components/web/contact/ContactUsArabic';
 import AddFeedbackArabic from './components/web/addFeedback/AddFeedbackArabic';
+import ResultSearchArabic from './components/web/searchResult/ResultSearchArabic';
+import SearchOnCityArabic from './components/web/searchResult/SearchOneCityArabic';
 
 
 
@@ -88,10 +92,6 @@ export default function App() {
         path:"displayEstate",
         element:<RecentEstate/>
       },
-      // {
-      //   path:"displayHouse",
-      //   element:<DisplayHouse/>
-      // },
       {
         path:"ditalState/:EstateId",
         element:<DetalisEstate/>
@@ -107,6 +107,14 @@ export default function App() {
       {
         path:"contact",
         element:<ContactUs/>
+      },
+      {
+        path:"searchResults",
+        element:<ResultSearch/>
+      },
+      {
+        path:"searchCity",
+        element:<SearchOnCity/>
       },
       {
         path:"profile",
@@ -163,10 +171,6 @@ export default function App() {
         path:"displayEstateArabic",
         element:<RecentEstateArabic/>
       },
-      // {
-      //   path:"displayHouse",
-      //   element:<DisplayHouse/>
-      // },
       {
         path:"ditalStateArabic/:EstateId",
         element:<DetalisEstateArabic/>
@@ -182,6 +186,14 @@ export default function App() {
       {
         path:"contactArabic",
         element:<ContactUsArabic/>
+      },
+      {
+        path:"searchResultsArabic",
+        element:<ResultSearchArabic/>
+      },
+      {
+        path:"searchCityArabic",
+        element:<SearchOnCityArabic/>
       },
       {
         path:"profileArabic",

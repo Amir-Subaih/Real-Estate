@@ -29,7 +29,7 @@ export function UserContextProvider({children})
             getUserData();
         }
     },[userToken]);
-    return <UserContext.Provider value={{userToken,setUserToken,userData,setUserData,loading,setLoading,setUserId,isAdmin,setIsAdmin}}>
+    return <UserContext.Provider value={{userToken,setUserToken,userData,setUserData,loading,setLoading,setUserId,isAdmin,setIsAdmin,userId}}>
         {children}
     </UserContext.Provider>
 }

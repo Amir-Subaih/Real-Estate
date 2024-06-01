@@ -1,27 +1,33 @@
-import axios from 'axios'
-import React from 'react'
-import { useQuery } from 'react-query';
+import React, { useContext } from 'react'
 import style from './Estate.module.css';
 import { Link } from 'react-router-dom';
+import { DisplayContext } from '../context/Display';
+import { useQuery } from 'react-query';
 
-export default function Estate({rs,loadingR}) {
-    console.log(rs);
-    // const displayEstate = async () => {
-    //     const { data } = await axios.get("https://estatetest.onrender.com/api/estate/all?pageNumber=1 ");
-    //     // console.log(data);
-    //     return data;
-    // }
-    // const { data, isLoading } = useQuery("displayEstate", displayEstate);
-    // console.log(data);
+export default function Estate() {
+    console.log("this",DisplayContext);
+    const displayContext = useContext(DisplayContext);
 
-    if (loadingR) {
+    if (!displayContext) {
+        return <div className={style.error}>Context not available</div>; // Added error handling
+    }
+    const {displayRecentEstate}=displayContext;
+
+    const displayRecent =async()=>{
+        const result = await displayRecentEstate();
+        return result;
+    }
+    const { data, isLoading } = useQuery("displayEstate", displayRecent);
+    console.log(data);
+
+    if (isLoading) {
         return <h1>Loading...</h1>
     }
     return (
         <div className={`container my-5 ${style.recnt}`}>
             <p>Recently Added</p>
             <div className="row">
-                { rs.estates? rs.estates.map((state) =>
+                { data.estates? data.estates.map((state) =>
                     <div className={`col-md-6  ${style.item}`} key={state._id}>
                         <div className="img">
                             <Link to={`/ditalState/${state._id}`}>
@@ -40,14 +46,3 @@ export default function Estate({rs,loadingR}) {
     )
 }
 
-{/* <div className="card" style={{ width: '18rem' }}>
-                            <img src={state.imageUrl} className={`${style.img}`} alt="..." />
-                            <div className="card-body">
-                                <h4>{state.ownerId.name}</h4>
-                                <p>{state.address}</p>
-                                <h5 className="card-title">House</h5>
-                                <p className="card-text">{state.description}</p>
-                                <p>${state.price}</p>
-                                <a href="#" className="btn btn-primary">Detalis</a>
-                            </div>
-                        </div> */}

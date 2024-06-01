@@ -36,7 +36,7 @@ export default function Navbar() {
               <Link className={`${style.navLink}`} aria-current="page" to={"/ara"}>الصفحة الرئيسية</Link>
             </li>
             <li className="nav-item">
-              <a className={`${style.navLink}`} href="/myForm">المنازل</a>
+              <a className={`${style.navLink}`} href="/ara">المنازل</a>
             </li>
             <li className="nav-item">
               <a className={`${style.navLink}`} href="#">المتجر</a>

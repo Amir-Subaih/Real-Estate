@@ -1,20 +1,34 @@
-import axios from 'axios'
-import React from 'react'
-import { useQuery } from 'react-query';
+import React, { useContext }  from 'react'
 import style from './Estate.module.css';
 import { Link } from 'react-router-dom';
+import { DisplayContext } from '../context/Display';
+import { useQuery } from 'react-query';
 
-export default function Estate({ rs, loadingR }) {
-    console.log(rs);
+export default function Estate() {
+    
+    console.log("this",DisplayContext);
+    const displayContext = useContext(DisplayContext);
 
-    if (loadingR) {
-        return <h1>جارٍ التحميل...</h1>
+    if (!displayContext) {
+        return <div className={style.error}>Context not available</div>; // Added error handling
+    }
+    const {displayRecentEstate}=displayContext;
+
+    const displayRecent =async()=>{
+        const result = await displayRecentEstate();
+        return result;
+    }
+    const { data, isLoading } = useQuery("displayEstate", displayRecent);
+    console.log(data);
+
+    if (isLoading) {
+        return <h1>Loading...</h1>
     }
     return (
         <div className={`container my-5 ${style.recnt}`} dir='rtl'>
             <p className={`${style.p1}`}>تمت إضافتها مؤخرًا</p>
             <div className="row">
-                {rs.estates ? rs.estates.map((state) =>
+                {data.estates ? data.estates.map((state) =>
                     <div className={`col-md-6  ${style.item}`} key={state._id}>
                         <div className="img">
                             <Link to={`/ara/ditalStateArabic/${state._id}`}>

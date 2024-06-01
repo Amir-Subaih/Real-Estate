@@ -3,9 +3,6 @@ import style from '../home/Home.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import RecentEstate from '../recentEstates/RecentEstate';
-// import DisplayEstate from '../displayEstate/DisplayEstate';
-import axios from 'axios';
-import { useQuery } from 'react-query';
 import DisplayHouse from '../house/DisplayHouse';
 import DisplayLand from '../land/DisplayLand';
 import ContactUs from '../contact/ContactUs';
@@ -38,50 +35,18 @@ export default function Home() {
     
     console.log("user data",userData ,"user token",userToken);
 
-    const RecentlyEstate = async () => {
-        try {
-            const { data } = await axios.get("https://estatetest.onrender.com/api/estate/all?pageNumber=1");
-            return data;
-        } catch (error) {
-            console.error("Error fetching estates:", error);
-            throw error;
-        }
+    
+    const [location,setLocation] = useState('');
+    const [typeState,setTypeState]=useState('');
+    const [rentrORseller,setRentrORseller]=useState('');
+    const navigate = useNavigate();
+    const handleSearch = () => {
+        navigate(`/searchResults?typeState=${typeState}&cityName=${location}&SR=${rentrORseller}`);
+    };
+    
+    const searchOnCity=(city)=>{
+        navigate(`/searchCity?cityName=${city}`);
     }
-
-    const displayHouse = async () => {
-        try {
-            const { data } = await axios.get("https://estatetest.onrender.com/api/estate/all?typeEatateS=House&pageNumber=1");
-            return data;
-        } catch (error) {
-            console.error("Error fetching house estates:", error);
-            throw error;
-        }
-    }
-
-    const displayLand = async () => {
-        try {
-            const { data } = await axios.get("https://estatetest.onrender.com/api/estate/all?typeEatateS=Land&pageNumber=1");
-            return data;
-        } catch (error) {
-            console.error("Error fetching house estates:", error);
-            throw error;
-        }
-    }
-    const displayFeedback = async () => {
-        try {
-            const { data } = await axios.get("https://estatetest.onrender.com/api/feedback/all?pageNum=1");
-            return data;
-        } catch (error) {
-            console.error("Error fetching house estates:", error);
-            throw error;
-        }
-    }
-
-    const { data: estateData, isLoading: isEstateLoading } = useQuery("displayEstate", RecentlyEstate );
-    const { data: estateData1, isLoading: isEstateLoading1} = useQuery("displayHouseEstate", displayHouse);
-    const { data: estateDataLand, isLoading: isLoadingLand} = useQuery("displayLandEstate", displayLand);
-    const { data: feedback, isLoading: isLoadingFeedback } = useQuery("displayFeedback", displayFeedback);
-
     
 
 
@@ -98,31 +63,16 @@ export default function Home() {
                 </div>
 
                 <div className={`${style.rectangle}`}>
-                    {/* <ul className="nav nav-pills gap-5">
-                        <li className={`${style.navitem}`}>
-                            <a className={`nav-link ${activeButton === "rent" ? "active" : ""}`}
-                                onClick={() => isActive("rent")} >RENT</a>
-                        </li>
-                        <li className={`${style.navitem}`}>
-                            <a className={`nav-link ${activeButton === "buy" ? "active" : ""}`}
-                                onClick={() => isActive("buy")} >BUY</a>
-                        </li>
-                        <li className={`${style.navitem}`}>
-                            <a className={`nav-link ${activeButton === "sell" ? "active" : ""}`}
-                                onClick={() => isActive("sell")} >SELL</a>
-                        </li>
-                    </ul> */}
-
                     <div className="row">
                         <div className="col-md-4">
                             <div className={`${style.location}`}>
                                 <p>Location</p> 
 
-                                <select defaultValue={0} className="form-select" aria-label="Default select example">
-                                    <option value={0}>Select Your City</option>
-                                    <option value={1}>One</option>
-                                    <option value={2}>Two</option>
-                                    <option value={3}>Three</option>
+                                <select  className="form-select" aria-label="Default select example" value={location} onChange={(e)=>setLocation(e.target.value)}>
+                                    <option value="">Select Your City</option>
+                                    <option value="Ramallah">Ramallah</option>
+                                    <option value="Tulkarm">Tulkarm</option>
+                                    <option value="Nablus">Nablus</option>
                                 </select>
 
                             </div>
@@ -132,30 +82,32 @@ export default function Home() {
                             <div className={`${style.property}`}>
                                 <p>Property Type</p>
 
-                                <select defaultValue={0} className="form-select" aria-label="Default select example">
-                                    <option value={0}>Choose Property Type</option>
-                                    <option value={1}>One</option>
-                                    <option value={2}>Two</option>
+                                <select className="form-select" aria-label="Default select example" value={typeState} onChange={(e)=>setTypeState(e.target.value)}>
+                                    <option value="">Choose Property Type</option>
+                                    <option value="House">House</option>
+                                    <option value="Apartment">Apartment</option>
+                                    <option value="Land">Land</option>
+                                    <option value="Store">Store</option>
+                                    <option value="Chalet">Chalet</option>
                                 </select>
                             </div>
                         </div>
 
                         <div className="col-md-3">
                             <div className={`${style.price}`}>
-                                <p>Price Range</p>
+                                <p>Renter/Seller</p>
 
-                                <select defaultValue={0} className="form-select" aria-label="Default select example">
-                                    <option value={0}>Choose Price Range</option>
-                                    <option value={1}>One</option>
-                                    <option value={2}>Two</option>
-                                    <option value={3}>Three</option>
+                                <select className="form-select" aria-label="Default select example" value={rentrORseller} onChange={(e)=>setRentrORseller(e.target.value)}>
+                                    <option value="">Choose rentrORseller</option>
+                                    <option value="Rent">Renter</option>
+                                    <option value="Sale">Seller</option>
                                 </select>
                             </div>
                         </div>
 
                         <div className="col-md-1">
                             <div className={`${style.search}`}>
-                            <FontAwesomeIcon icon={faMagnifyingGlass} className={`${style.icon}`}/>
+                            <FontAwesomeIcon icon={faMagnifyingGlass} className={`${style.icon}`} onClick={handleSearch}/>
                             </div>
                         </div>
                     </div>
@@ -168,35 +120,34 @@ export default function Home() {
                 </div>
                 <div className="row">
                 <div className={`col-md-3 ${style.imgHome}`}>
-                    <img src='../../../../img/alquds.jpeg' className='img-fluid'/>
+                    <img src='../../../../img/alquds.jpeg' className='img-fluid' onClick={() => searchOnCity("Jerusalem")} />
                     <p>Jerusalem</p>
                 </div>
 
                 <div className={`col-md-3 ${style.imgHome}`}>
-                    <img src='../../../../img/gaza.jpeg' className='img-fluid'/>
+                    <img src='../../../../img/gaza.jpeg' className='img-fluid' onClick={() => searchOnCity("Gaza")} />
                     <p>Gaza</p>
                 </div>
 
                 <div className={`col-md-3 ${style.imgHome}`}>
-                    <img src='../../../../img/nablus.jpeg' className='img-fluid'/>
+                    <img src='../../../../img/nablus.jpeg' className='img-fluid' onClick={() => searchOnCity("Nablus")}/>
                     <p>Nablus</p>
                 </div>
 
                 <div className={`col-md-3 ${style.imgHome}`}>
-                    <img src='../../../../img/haifa.jpeg' className='img-fluid w-100'/>
+                    <img src='../../../../img/haifa.jpeg' className='img-fluid w-100' onClick={() => searchOnCity("Haifa")}/>
                     <p>Haifa</p>
                 </div>
                 </div>
             </div>
         </div>
 
-        <RecentEstate rs={estateData} loadingR={isEstateLoading}/>
-        
-        <DisplayHouse sHouse={estateData1} loadingH={isEstateLoading1}/>
 
-        <DisplayLand sLand={estateDataLand} loadingL={isLoadingLand}/>
+        <RecentEstate/>
+        <DisplayHouse/>
+        <DisplayLand/>
 
-        <DisplayFeedback df={feedback} loadingR={isLoadingFeedback}/>
+        <DisplayFeedback/>
 
         <ContactUs/>
         </>
