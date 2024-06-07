@@ -22,6 +22,24 @@ const AddState = () => {
     const [typeEstateSR, setTypeEstateSR] = useState("");
     const [description, setDescription] = useState("");
     const [images, setImages] = useState([]);
+    const [location, setLocation] = useState(null);//for map
+
+    const handleGetLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              setLocation({ latitude, longitude });
+              console.log("Latitude=",latitude, "Longitude=",longitude);
+            },
+            (error) => {
+              console.error('Error getting location', error);
+            }
+          );
+        } else {
+          console.error('Geolocation is not supported by this browser.');
+        }//for map
+    };
     
     useEffect(()=>{
         if(userId)
@@ -42,6 +60,13 @@ const AddState = () => {
         formData.append("area", parseInt(area));
         formData.append("typeEstateSR", typeEstateSR);
         formData.append("description",description);
+        if (location) {
+            formData.append("latitude", location.latitude);
+            formData.append("longitude",location.longitude);
+        }else{
+            toast.error("Please add location");
+            return;
+        }
 
         if (["House", "Apartment", "Chalet"].includes(typeEstates)) {
             formData.append("bathrooms", parseInt(bathrooms));
@@ -113,7 +138,7 @@ const AddState = () => {
                 <div className="row">
                 <div className="col-md-3">
                     <div className="location">
-                    <label className={`mb-2 ${style.label}`}><span className="text-danger">*</span> Location State:</label>
+                    <label className={`mb-2 ${style.label}`}><span className="text-danger">*</span> City:</label>
                     <select className="form-select w-75 border-4" required value={address} onChange={(e) => setAddress(e.target.value)}>
                         <option value="">Select Location</option>
                         <option value="Ramallah">Ramallah</option>
@@ -223,6 +248,13 @@ const AddState = () => {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
+                <div className="map mb-4">
+                  <label className={`mb-2 ${style.label}`}><span className="text-danger">*</span> Location Estate:</label><br/>
+                  <button onClick={handleGetLocation} className={`${style.btn1}`}>Get Location</button>
+                  {location &&(
+                    <p className={`${style.mas}`}>Location added success</p>
+                  )}
+                </div>{/* for map */}
                 
                 <div className="images mb-4">
                 <label className={`mb-2 ${style.label}`}><span className="text-danger">*</span> Images:</label>
