@@ -4,6 +4,18 @@ import style from '../addState/AddState.module.css'
 import { UserContext } from "../context/User";
 import { toast } from "react-toastify";
 import {useNavigate } from 'react-router-dom'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fixing default marker icon issue with Webpack
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
+});
 
 const AddState = () => {
     const navigat=useNavigate();
@@ -23,23 +35,16 @@ const AddState = () => {
     const [description, setDescription] = useState("");
     const [images, setImages] = useState([]);
     const [location, setLocation] = useState(null);//for map
+    const [selectedLocation, setSelectedLocation] = useState(null); // State to store the temporarily selected location
 
-    const handleGetLocation = () => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              setLocation({ latitude, longitude });
-              console.log("Latitude=",latitude, "Longitude=",longitude);
-            },
-            (error) => {
-              console.error('Error getting location', error);
-            }
-          );
-        } else {
-          console.error('Geolocation is not supported by this browser.');
-        }//for map
-    };
+    // Function to set the confirmed location based on the selected location
+  const handleGetLocation = () => {
+    if (selectedLocation) {
+      setLocation(selectedLocation);
+    } else {
+      console.error('No location selected.');
+    }
+  };//for map
     
     useEffect(()=>{
         if(userId)
@@ -126,6 +131,29 @@ const AddState = () => {
     
     // const showBathroomsBedrooms = ["House", "Apartment", "Chalet",""].includes(typeEstates);
     const showBathroomsBedrooms = !["Store", "Land"].includes(typeEstates);
+
+    // Component to handle map clicks and set the selected location
+  const LocationMarker = () => {
+    useMapEvents({
+      click(e) {
+        setSelectedLocation({
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+        });
+      },
+    });
+
+    // Render a marker at the selected location
+    return selectedLocation ? (
+        <Marker position={[selectedLocation.latitude, selectedLocation.longitude]}>
+          <Popup>
+            Selected location: <br /> Latitude: {selectedLocation.latitude}, Longitude: {selectedLocation.longitude}
+          </Popup>
+        </Marker>
+      ) : null;
+    };
+
+
 
     return (
         <div className="container">
@@ -250,6 +278,20 @@ const AddState = () => {
                 </div>
                 <div className="map mb-4">
                   <label className={`mb-2 ${style.label}`}><span className="text-danger">*</span> Location Estate:</label><br/>
+                  <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '400px', width: '100%' }}>
+                        <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        <LocationMarker /> {/* Component to handle and display the selected location */}
+                        {location && ( // Render a marker at the confirmed location
+                        <Marker position={[location.latitude, location.longitude]}>
+                            <Popup>
+                            You are here: <br /> Latitude: {location.latitude}, Longitude: {location.longitude}
+                            </Popup>
+                        </Marker>
+                        )}
+                   </MapContainer>
                   <button onClick={handleGetLocation} className={`${style.btn1}`}>Get Location</button>
                   {location &&(
                     <p className={`${style.mas}`}>Location added success</p>

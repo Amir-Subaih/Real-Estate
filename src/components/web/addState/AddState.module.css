@@ -45,6 +45,7 @@ text-align: left;
 .btn1
 {
     padding: 3px 25px;
+    margin-top: 5px;
     border-radius: 50px;
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
